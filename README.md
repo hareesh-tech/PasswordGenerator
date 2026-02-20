@@ -26,8 +26,8 @@ The project is structured into separate modules for clarity and maintainability:
 │   ├── backend.py      # Handles database and password generation logic
 |   └── frontend.py     # Contains the Kivy UI and application logic
 |── Output
-|   ├── pass_fort.db        # SQLite database for storing passwords
-|   └── pass_fort.log       # Log file for application events
+|   ├── pass_fort.db    # SQLite database for storing passwords
+|   └── pass_fort.log   # Log file for application events
 |── main.py             # Main entry point for the application
 └── requirements.txt    # Python dependencies
 

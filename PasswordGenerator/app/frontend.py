@@ -1,14 +1,17 @@
 import logging
-import pyperclip
 
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.core.window import Window
+from kivy.core.clipboard import Clipboard
+from kivy.factory import Factory
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
+from kivy.uix.checkbox import CheckBox
+from kivy.uix.gridlayout import GridLayout
 from kivy.clock import Clock
 
 from .backend import DatabaseManager, PasswordGenerator
@@ -92,8 +95,8 @@ BoxLayout:
                 id: length_input
                 text: "16"
                 multiline: False
-                size_hint_x: 0.1
-                width: 50
+                size_hint_x: None
+                width: 60
                 size_hint_y: 0.3
                 length: 40
                 font_size: "16sp"
@@ -105,8 +108,69 @@ BoxLayout:
                 input_filter: "int"
                 on_text_validate: app.on_input_change(self.text)
 
-    Widget:
-        size_hint_y: 0.1
+    # Filters Card
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 0.25
+        padding: 20
+        spacing: 10
+
+        canvas.before:
+            Color:
+                rgba: 0.12, 0.16, 0.25, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [20,]
+
+        Label:
+            text: "Filters"
+            color: 0.8, 0.85, 0.95, 1
+            bold: True
+            size_hint_y: 0.3
+
+        GridLayout:
+            cols: 2
+            spacing: 10
+
+            BoxLayout:
+                CheckBox:
+                    id: symbols_chk
+                    active: True
+                    size_hint_x: 0.3
+                    color: 0.39, 0.40, 0.95, 1
+                Label:
+                    text: "Add Symbols"
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+                    color: 0.8, 0.85, 0.95, 1
+
+            BoxLayout:
+                CheckBox:
+                    id: text_chk
+                    group: 'type'
+                    size_hint_x: 0.3
+                    color: 0.39, 0.40, 0.95, 1
+                Label:
+                    text: "Text Only"
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+                    color: 0.8, 0.85, 0.95, 1
+
+            BoxLayout:
+                CheckBox:
+                    id: numbers_chk
+                    group: 'type'
+                    size_hint_x: 0.3
+                    color: 0.39, 0.40, 0.95, 1
+                Label:
+                    text: "Numbers Only"
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+                    color: 0.8, 0.85, 0.95, 1
 
     EnterpriseButton:
         text: "GENERATE PASSWORD"
@@ -124,7 +188,7 @@ class PassFortApp(App):
         self.current_password = None
 
     def build(self):
-        Window.size = (500, 650)
+        Window.size = (450, 800)
         self.title = "PassFort"
         return Builder.load_string(KV)
 
@@ -139,8 +203,12 @@ class PassFortApp(App):
 
     def generate_password(self):
         length = int(self.root.ids.length_slider.value)
+        add_symbols = self.root.ids.symbols_chk.active
+        only_text = self.root.ids.text_chk.active
+        only_numbers = self.root.ids.numbers_chk.active
 
-        password = self.generator.generate(length=length)
+        password = self.generator.generate(length=length, add_symbols=add_symbols, 
+                                         only_text=only_text, only_numbers=only_numbers)
 
         if password:
             self.current_password = password
@@ -209,7 +277,8 @@ class PassFortApp(App):
             padding=[10,10],
             background_color=(0.18, 0.22, 0.33, 1),
             foreground_color=(1,1,1,1),
-            size_hint_y=0.6
+            size_hint_y=None,
+            height=50
         )
 
         layout.add_widget(uid_input)
@@ -249,16 +318,10 @@ class PassFortApp(App):
     # -------------------------------
 
     def create_enterprise_button(self, text):
-        return Button(
-            text=text,
-            background_normal='',
-            background_color=(0.39, 0.40, 0.95, 1),
-            color=(1,1,1,1),
-            bold=True
-        )
+        return Factory.EnterpriseButton(text=text)
 
     def copy_to_clipboard(self, password):
-        pyperclip.copy(password)
+        Clipboard.copy(password)
         self.show_message("Copied to clipboard")
 
     def show_message(self, message):

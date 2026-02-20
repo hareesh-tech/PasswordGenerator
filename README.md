@@ -20,7 +20,7 @@ PassFort is a cross-platform, secure password generator with an enterprise-level
 The project is structured into separate modules for clarity and maintainability:
 
 ```
-.
+
 ├── app/
 │   ├── __init__.py
 │   ├── backend.py      # Handles database and password generation logic

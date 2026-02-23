@@ -51,7 +51,10 @@ The project is structured into separate modules for clarity and maintainability:
 2.  **Create a virtual environment (recommended):**
     ```bash
     python -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    # On Linux
+    source venv/bin/activate
+    # On Windows
+    venv\Scripts\activate
     ```
 
 3.  **Install the required dependencies:**

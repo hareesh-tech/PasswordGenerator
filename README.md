@@ -29,7 +29,7 @@ The project is structured into separate modules for clarity and maintainability:
 |   ├── pass_fort.db    # SQLite database for storing passwords
 |   └── pass_fort.log   # Log file for application events
 |── main.py             # Main entry point for the application
-└── requirements.txt    # Python dependencies
+└── requirement.txt    # Python dependencies
 
 ```
 
@@ -56,7 +56,7 @@ The project is structured into separate modules for clarity and maintainability:
 
 3.  **Install the required dependencies:**
     ```bash
-    pip install -r requirements.txt
+    pip install -r requirement.txt
     ```
 
 ### Running the Application
